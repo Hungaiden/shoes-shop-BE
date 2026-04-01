@@ -1,0 +1,31 @@
+@baseUrl = http://localhost:3000
+@contentType = application/json
+
+### ==========================================
+###              AUTH
+### ==========================================
+
+### Login
+POST {{baseUrl}}/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "vana.nguyen@example.com",
+  "password": "12345678"
+}
+
+###
+
+### Logout
+POST {{baseUrl}}/auth/logout
+Content-Type: {{contentType}}
+
+###
+
+### Refresh Token
+PATCH {{baseUrl}}/auth/refresh-token
+Content-Type: {{contentType}}
+
+{
+  "refreshToken": "your_refresh_token_here"
+}

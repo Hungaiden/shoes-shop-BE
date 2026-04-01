@@ -1,0 +1,70 @@
+@baseUrl = http://localhost:3000
+@contentType = application/json
+@token = your_access_token_here
+@productId = 699d0169a42e2355a69eda6c
+
+### ==========================================
+###              PRODUCTS
+### ==========================================
+
+### Get All Products
+GET {{baseUrl}}/products?offset=0&limit=10
+
+###
+
+### Get All Products (with filter & sort)
+GET {{baseUrl}}/products?status=active&minPrice=100000&maxPrice=500000&category=Shirts&brand=Nike&offset=0&limit=10&sortBy=price&sortType=asc
+
+###
+
+### Get Product By ID
+GET {{baseUrl}}/products/detail/{{productId}}
+
+###
+
+### Get Products By Category
+GET {{baseUrl}}/products/category/Shirts?offset=0&limit=10
+
+###
+
+### Create Product
+POST {{baseUrl}}/products/create
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "name": "Áo thun nam basic",
+  "sku": "SKU-AT-001",
+  "description": "Áo thun nam chất liệu cotton thoáng mát",
+  "price": 250000,
+  "discount": 10,
+  "images": [],
+  "brand": "Local Brand",
+  "category": "Shirts",
+  "sizes": ["S", "M", "L", "XL"],
+  "colors": ["Black", "White", "Navy"],
+  "material": "Cotton 100%",
+  "stock": 100,
+  "isFeatured": false,
+  "status": "active"
+}
+
+###
+
+### Update Product
+PATCH {{baseUrl}}/products/update/{{productId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "name": "Áo thun nam premium",
+  "price": 300000,
+  "stock": 80,
+  "isFeatured": true
+}
+
+###
+
+### Delete Product (soft delete)
+DELETE {{baseUrl}}/products/deleteOne/{{productId}}
+Authorization: Bearer {{token}}

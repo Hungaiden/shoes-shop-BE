@@ -1,0 +1,42 @@
+@baseUrl = http://localhost:3000
+@contentType = application/json
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTlkMWIzNDUxNGFkZmViY2Q4NjE0MDUiLCJlbWFpbCI6InZhbmEubmd1eWVuQGV4YW1wbGUuY29tIiwicm9sZSI6ImFkbWluIiwiZnVsbE5hbWUiOiJOZ3V5ZW4gVmFuIEFCQiIsImlhdCI6MTc3MTkwNTEzOSwiZXhwIjoxODAzNDQxMTM5fQ.l8Wh5zrSr1hzLFH9jMtHOh-_IQYEIikoxwPbPnj6vII
+@accountId = 6650f1f1f1f1f1f1f1f1f1f1
+
+### ==========================================
+###              ACCOUNTS
+### ==========================================
+
+### Get All Accounts
+GET {{baseUrl}}/accounts?offset=0&limit=10
+
+###
+
+### Get Account By ID
+GET {{baseUrl}}/accounts/detail/{{accountId}}
+
+###
+
+### Create Account (multipart/form-data - dùng Postman hoặc curl nếu cần upload avatar)
+# POST {{baseUrl}}/accounts/create
+# Content-Type: multipart/form-data; boundary=----FormBoundary
+#
+# ------FormBoundary
+# Content-Disposition: form-data; name="fullname"
+#
+# Nguyễn Văn A
+# ------FormBoundary--
+
+### Update Account
+PATCH {{baseUrl}}/accounts/update/{{accountId}}
+Content-Type: {{contentType}}
+
+{
+  "fullname": "Nguyễn Văn B",
+  "phone": "0987654321"
+}
+
+###
+
+### Delete Account
+DELETE {{baseUrl}}/accounts/deleteOne/{{accountId}}

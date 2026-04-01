@@ -1,0 +1,171 @@
+@baseUrl = http://localhost:3000
+@contentType = application/json
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTlkMWIzNDUxNGFkZmViY2Q4NjE0MDUiLCJlbWFpbCI6InZhbmEubmd1eWVuQGV4YW1wbGUuY29tIiwicm9sZSI6ImFkbWluIiwiZnVsbE5hbWUiOiJOZ3V5ZW4gVmFuIEFCQiIsImlhdCI6MTc3Mjc2MzAyNywiZXhwIjoxODA0Mjk5MDI3fQ.YLKTltWWA-ptLixT6ZcyeBzRHQcCcPAB6DI1IsINeuw
+@categoryId = your_category_id_here
+@bookingId = your_booking_id_here
+@reviewId = your_review_id_here
+@productId = 699d0169a42e2355a69eda6c
+@userId = your_user_id_here
+
+### ==========================================
+###         PRODUCT CATEGORIES
+### ==========================================
+
+### Get All Categories
+GET {{baseUrl}}/product-categories?offset=0&limit=10
+
+###
+
+### Get Category By ID
+GET {{baseUrl}}/product-categories/detail/{{categoryId}}
+
+###
+
+### Create Category
+POST {{baseUrl}}/product-categories/create
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "title": "T-Shirts",
+  "description": "Áo thun các loại",
+  "status": "active",
+  "position": 1
+}
+
+###
+
+### Update Category
+PATCH {{baseUrl}}/product-categories/update/{{categoryId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "description": "Áo thun nam và nữ",
+  "position": 2
+}
+
+###
+
+### Delete Category
+DELETE {{baseUrl}}/product-categories/delete/{{categoryId}}
+Authorization: Bearer {{token}}
+
+
+### ==========================================
+###         PRODUCT BOOKINGS
+### ==========================================
+
+### Create Booking
+POST {{baseUrl}}/products/bookings/create
+Content-Type: {{contentType}}
+
+{
+  "items": [
+    {
+      "product_id": "{{productId}}",
+      "name": "Men Cotton T-Shirt",
+      "thumbnail": "https://example.com/img.jpg",
+      "price": 250000,
+      "discount": 10,
+      "size": "L",
+      "color": "Black",
+      "quantity": 2,
+      "subtotal": 450000
+    }
+  ],
+  "contact_info": {
+    "name": "Nguyễn Văn A",
+    "phone": "0901234567",
+    "email": "vana@example.com",
+    "address": "123 Đường ABC, Quận 1, TP.HCM"
+  },
+  "note": "Giao hàng giờ hành chính",
+  "total_price": 450000,
+  "payment_method": "vnpay"
+}
+
+###
+
+### Get All Bookings (Admin)
+GET {{baseUrl}}/products/bookings/getAll?offset=0&limit=10
+Authorization: Bearer {{token}}
+
+###
+
+### Get Booking By ID
+GET {{baseUrl}}/products/bookings/detail/{{bookingId}}
+
+###
+
+### Get Bookings By User ID
+GET {{baseUrl}}/products/bookings/user/{{userId}}?offset=0&limit=10
+
+###
+
+### Update Booking Status
+PATCH {{baseUrl}}/products/bookings/update/{{bookingId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "status": "confirmed",
+  "payment_status": "paid"
+}
+
+###
+
+### Delete Booking
+DELETE {{baseUrl}}/products/bookings/delete/{{bookingId}}
+Authorization: Bearer {{token}}
+
+
+### ==========================================
+###         PRODUCT REVIEWS
+### ==========================================
+
+### Create Review
+POST {{baseUrl}}/products/reviews/create
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "product_id": "{{productId}}",
+  "rating": 5,
+  "comment": "Sản phẩm rất tốt, chất lượng vải đẹp!",
+  "size": "L",
+  "color": "Black"
+}
+
+###
+
+### Get All Reviews
+GET {{baseUrl}}/products/reviews?offset=0&limit=10
+
+###
+
+### Get Reviews By Product ID
+GET {{baseUrl}}/products/reviews/{{productId}}?offset=0&limit=10
+
+###
+
+### Approve Review
+PATCH {{baseUrl}}/products/reviews/approve/{{reviewId}}
+Authorization: Bearer {{token}}
+
+###
+
+### Update Review
+PATCH {{baseUrl}}/products/reviews/update/{{reviewId}}
+Content-Type: {{contentType}}
+
+{
+  "rating": 4,
+  "comment": "Sản phẩm ổn, giao hàng nhanh"
+}
+
+###
+
+### Delete Review
+DELETE {{baseUrl}}/products/reviews/delete/{{reviewId}}
+Authorization: Bearer {{token}}

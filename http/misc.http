@@ -1,0 +1,98 @@
+@baseUrl = http://localhost:3000
+@contentType = application/json
+@token = your_access_token_here
+
+### ==========================================
+###              DASHBOARD
+### ==========================================
+
+### Get Dashboard Summary
+GET {{baseUrl}}/dashboard/summary
+Authorization: Bearer {{token}}
+
+### ==========================================
+###           SYSTEM SETTINGS
+### ==========================================
+
+### Get System Settings
+GET {{baseUrl}}/system-settings
+
+###
+
+### Create System Settings
+POST {{baseUrl}}/system-settings
+Content-Type: {{contentType}}
+
+{
+  "siteName": "Book Tour",
+  "logo": "",
+  "phone": "0123456789",
+  "email": "contact@booktour.vn",
+  "address": "123 ABC, Hà Nội"
+}
+
+###
+
+### Update System Settings
+PATCH {{baseUrl}}/system-settings
+Content-Type: {{contentType}}
+
+{
+  "siteName": "Book Tour VN",
+  "phone": "0987654321"
+}
+
+### ==========================================
+###              PROFILE
+### ==========================================
+
+### Get My Profile
+GET {{baseUrl}}/profile
+Authorization: Bearer {{token}}
+
+###
+
+### Get My Bookings
+GET {{baseUrl}}/profile/booking
+Authorization: Bearer {{token}}
+
+### ==========================================
+###              UPLOAD
+### ==========================================
+
+# Dùng Postman/curl để upload file (multipart/form-data)
+# POST {{baseUrl}}/upload/single
+# Content-Type: multipart/form-data
+# Authorization: Bearer {{token}}
+
+### ==========================================
+###         GROQ AI (Tour Planner)
+### ==========================================
+
+### Generate Tour Plan with Groq
+POST {{baseUrl}}/groq/generate
+Content-Type: {{contentType}}
+
+{
+  "prompt": "Tư vấn tour du lịch Đà Nẵng 3 ngày cho 2 người"
+}
+
+### ==========================================
+###              PAYMENT (VNPay)
+### ==========================================
+
+### Create VNPay Payment URL
+POST {{baseUrl}}/payment/vnpay/create-payment-url
+Content-Type: {{contentType}}
+
+{
+  "amount": 5000000,
+  "orderDescription": "Thanh toan tour TOUR-HN-HL-001",
+  "orderType": "tour",
+  "language": "vn"
+}
+
+###
+
+### VNPay Return (callback - thường được gọi tự động bởi VNPay)
+GET {{baseUrl}}/payment/vnpay/return?vnp_Amount=500000&vnp_ResponseCode=00

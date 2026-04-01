@@ -1,0 +1,724 @@
+{
+  "info": {
+    "name": "Book Tour API",
+    "_postman_id": "booktour-api-collection",
+    "description": "Collection tổng hợp toàn bộ API của hệ thống Book Tour",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000", "type": "string" },
+    { "key": "token", "value": "your_access_token_here", "type": "string" },
+    {
+      "key": "accountId",
+      "value": "6650f1f1f1f1f1f1f1f1f1f1",
+      "type": "string"
+    },
+    {
+      "key": "productId",
+      "value": "699d0169a42e2355a69eda6c",
+      "type": "string"
+    },
+    { "key": "categoryId", "value": "your_category_id_here", "type": "string" },
+    { "key": "bookingId", "value": "your_booking_id_here", "type": "string" },
+    { "key": "reviewId", "value": "your_review_id_here", "type": "string" },
+    { "key": "userId", "value": "your_user_id_here", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"vana.nguyen@example.com\",\n  \"password\": \"12345678\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "logout"]
+            }
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/auth/refresh-token",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "refresh-token"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"your_refresh_token_here\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Accounts",
+      "item": [
+        {
+          "name": "Get All Accounts",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/accounts?offset=0&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts"],
+              "query": [
+                { "key": "offset", "value": "0" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Account By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/detail/{{accountId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "detail", "{{accountId}}"]
+            }
+          }
+        },
+        {
+          "name": "Update Account",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/update/{{accountId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "update", "{{accountId}}"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullname\": \"Nguyễn Văn B\",\n  \"phone\": \"0987654321\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Delete Account",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/deleteOne/{{accountId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["accounts", "deleteOne", "{{accountId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "item": [
+        {
+          "name": "Get Dashboard Summary",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/dashboard/summary",
+              "host": ["{{baseUrl}}"],
+              "path": ["dashboard", "summary"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "System Settings",
+      "item": [
+        {
+          "name": "Get System Settings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/system-settings",
+              "host": ["{{baseUrl}}"],
+              "path": ["system-settings"]
+            }
+          }
+        },
+        {
+          "name": "Create System Settings",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/system-settings",
+              "host": ["{{baseUrl}}"],
+              "path": ["system-settings"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"siteName\": \"Book Tour\",\n  \"logo\": \"\",\n  \"phone\": \"0123456789\",\n  \"email\": \"contact@booktour.vn\",\n  \"address\": \"123 ABC, Hà Nội\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Update System Settings",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/system-settings",
+              "host": ["{{baseUrl}}"],
+              "path": ["system-settings"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"siteName\": \"Book Tour VN\",\n  \"phone\": \"0987654321\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Profile",
+      "item": [
+        {
+          "name": "Get My Profile",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["profile"]
+            }
+          }
+        },
+        {
+          "name": "Get My Bookings",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/profile/booking",
+              "host": ["{{baseUrl}}"],
+              "path": ["profile", "booking"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Upload",
+      "item": [
+        {
+          "name": "Upload Single File",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/upload/single",
+              "host": ["{{baseUrl}}"],
+              "path": ["upload", "single"]
+            },
+            "body": {
+              "mode": "formdata",
+              "formdata": [{ "key": "file", "type": "file", "src": "" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Groq AI (Tour Planner)",
+      "item": [
+        {
+          "name": "Generate Tour Plan",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/groq/generate",
+              "host": ["{{baseUrl}}"],
+              "path": ["groq", "generate"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"prompt\": \"Tư vấn tour du lịch Đà Nẵng 3 ngày cho 2 người\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Payment (VNPay)",
+      "item": [
+        {
+          "name": "Create VNPay Payment URL",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/payment/vnpay/create-payment-url",
+              "host": ["{{baseUrl}}"],
+              "path": ["payment", "vnpay", "create-payment-url"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 5000000,\n  \"orderDescription\": \"Thanh toan tour TOUR-HN-HL-001\",\n  \"orderType\": \"tour\",\n  \"language\": \"vn\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "VNPay Return (Callback)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/payment/vnpay/return?vnp_Amount=500000&vnp_ResponseCode=00",
+              "host": ["{{baseUrl}}"],
+              "path": ["payment", "vnpay", "return"],
+              "query": [
+                { "key": "vnp_Amount", "value": "500000" },
+                { "key": "vnp_ResponseCode", "value": "00" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Product Categories",
+      "item": [
+        {
+          "name": "Get All Categories",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/product-categories?offset=0&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["product-categories"],
+              "query": [
+                { "key": "offset", "value": "0" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Category By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/product-categories/detail/{{categoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["product-categories", "detail", "{{categoryId}}"]
+            }
+          }
+        },
+        {
+          "name": "Create Category",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/product-categories/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["product-categories", "create"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"T-Shirts\",\n  \"description\": \"Áo thun các loại\",\n  \"status\": \"active\",\n  \"position\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Update Category",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/product-categories/update/{{categoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["product-categories", "update", "{{categoryId}}"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Áo thun nam và nữ\",\n  \"position\": 2\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Delete Category",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/product-categories/delete/{{categoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["product-categories", "delete", "{{categoryId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products?offset=0&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"],
+              "query": [
+                { "key": "offset", "value": "0" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get All Products (Filter & Sort)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products?status=active&minPrice=100000&maxPrice=500000&category=Shirts&brand=Nike&offset=0&limit=10&sortBy=price&sortType=asc",
+              "host": ["{{baseUrl}}"],
+              "path": ["products"],
+              "query": [
+                { "key": "status", "value": "active" },
+                { "key": "minPrice", "value": "100000" },
+                { "key": "maxPrice", "value": "500000" },
+                { "key": "category", "value": "Shirts" },
+                { "key": "brand", "value": "Nike" },
+                { "key": "offset", "value": "0" },
+                { "key": "limit", "value": "10" },
+                { "key": "sortBy", "value": "price" },
+                { "key": "sortType", "value": "asc" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Product By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/detail/{{productId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "detail", "{{productId}}"]
+            }
+          }
+        },
+        {
+          "name": "Get Products By Category",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/category/Shirts?offset=0&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "category", "Shirts"],
+              "query": [
+                { "key": "offset", "value": "0" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "create"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Áo thun nam basic\",\n  \"sku\": \"SKU-AT-001\",\n  \"description\": \"Áo thun nam chất liệu cotton thoáng mát\",\n  \"price\": 250000,\n  \"discount\": 10,\n  \"images\": [],\n  \"brand\": \"Local Brand\",\n  \"category\": \"Shirts\",\n  \"sizes\": [\"S\", \"M\", \"L\", \"XL\"],\n  \"colors\": [\"Black\", \"White\", \"Navy\"],\n  \"material\": \"Cotton 100%\",\n  \"stock\": 100,\n  \"isFeatured\": false,\n  \"status\": \"active\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/update/{{productId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "update", "{{productId}}"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Áo thun nam premium\",\n  \"price\": 300000,\n  \"stock\": 80,\n  \"isFeatured\": true\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Delete Product (Soft Delete)",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/products/deleteOne/{{productId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "deleteOne", "{{productId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Product Bookings",
+      "item": [
+        {
+          "name": "Create Booking",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/products/bookings/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "bookings", "create"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    {\n      \"product_id\": \"{{productId}}\",\n      \"name\": \"Men Cotton T-Shirt\",\n      \"thumbnail\": \"https://example.com/img.jpg\",\n      \"price\": 250000,\n      \"discount\": 10,\n      \"size\": \"L\",\n      \"color\": \"Black\",\n      \"quantity\": 2,\n      \"subtotal\": 450000\n    }\n  ],\n  \"contact_info\": {\n    \"name\": \"Nguyễn Văn A\",\n    \"phone\": \"0901234567\",\n    \"email\": \"vana@example.com\",\n    \"address\": \"123 Đường ABC, Quận 1, TP.HCM\"\n  },\n  \"note\": \"Giao hàng giờ hành chính\",\n  \"total_price\": 450000,\n  \"payment_method\": \"vnpay\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Get All Bookings (Admin)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/products/bookings/getAll?offset=0&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "bookings", "getAll"],
+              "query": [
+                { "key": "offset", "value": "0" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Booking By ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/bookings/detail/{{bookingId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "bookings", "detail", "{{bookingId}}"]
+            }
+          }
+        },
+        {
+          "name": "Get Bookings By User ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/bookings/user/{{userId}}?offset=0&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "bookings", "user", "{{userId}}"],
+              "query": [
+                { "key": "offset", "value": "0" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Booking Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/bookings/update/{{bookingId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "bookings", "update", "{{bookingId}}"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"confirmed\",\n  \"payment_status\": \"paid\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Delete Booking",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/products/bookings/delete/{{bookingId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "bookings", "delete", "{{bookingId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Product Reviews",
+      "item": [
+        {
+          "name": "Create Review",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/products/reviews/create",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "reviews", "create"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product_id\": \"{{productId}}\",\n  \"rating\": 5,\n  \"comment\": \"Sản phẩm rất tốt, chất lượng vải đẹp!\",\n  \"size\": \"L\",\n  \"color\": \"Black\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Get All Reviews",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/reviews?offset=0&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "reviews"],
+              "query": [
+                { "key": "offset", "value": "0" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Reviews By Product ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/products/reviews/{{productId}}?offset=0&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "reviews", "{{productId}}"],
+              "query": [
+                { "key": "offset", "value": "0" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Approve Review",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/products/reviews/approve/{{reviewId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "reviews", "approve", "{{reviewId}}"]
+            }
+          }
+        },
+        {
+          "name": "Update Review",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/products/reviews/update/{{reviewId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "reviews", "update", "{{reviewId}}"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rating\": 4,\n  \"comment\": \"Sản phẩm ổn, giao hàng nhanh\"\n}",
+              "options": { "raw": { "language": "json" } }
+            }
+          }
+        },
+        {
+          "name": "Delete Review",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/products/reviews/delete/{{reviewId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["products", "reviews", "delete", "{{reviewId}}"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+@baseUrl = http://localhost:3000
+@contentType = application/json
+@productId = 699d0169a42e2355a69eda6c
+@itemId = replace_with_cart_item_id
+@accessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTlkMWIzNDUxNGFkZmViY2Q4NjE0MDUiLCJlbWFpbCI6InZhbmEubmd1eWVuQGV4YW1wbGUuY29tIiwicm9sZSI6ImFkbWluIiwiZnVsbE5hbWUiOiJOZ3V5ZW4gVmFuIEFCQiIsImlhdCI6MTc3MzA2MzE2NywiZXhwIjoxODA0NTk5MTY3fQ.gTABogDLlpTNKtB26ai4HtlGSyLPj6vXi_iQ3Amy5ng
+
+### ==========================================
+###              CART (Giỏ hàng)
+### Tất cả API cần đăng nhập — accessToken gửi qua Cookie
+### Đăng nhập tại auth.http để lấy accessToken
+### ==========================================
+
+### Get Cart — Lấy giỏ hàng của user hiện tại
+GET {{baseUrl}}/cart
+Content-Type: {{contentType}}
+Cookie: accessToken={{accessToken}}
+
+###
+
+### Add To Cart — Thêm sản phẩm vào giỏ hàng
+POST {{baseUrl}}/cart/add
+Content-Type: {{contentType}}
+Cookie: accessToken={{accessToken}}
+
+{
+  "product_id": "{{productId}}",
+  "quantity": 2,
+  "size": "L",
+  "color": "Black"
+}
+
+###
+
+### Add To Cart (no size/color)
+POST {{baseUrl}}/cart/add
+Content-Type: {{contentType}}
+Cookie: accessToken={{accessToken}}
+
+{
+  "product_id": "{{productId}}",
+  "quantity": 1
+}
+
+###
+
+### Update Cart Item — Cập nhật số lượng / size / màu của một item
+PATCH {{baseUrl}}/cart/update/{{itemId}}
+Content-Type: {{contentType}}
+Cookie: accessToken={{accessToken}}
+
+{
+  "quantity": 5,
+  "size": "XL",
+  "color": "White"
+}
+
+###
+
+### Update Cart Item (only quantity)
+PATCH {{baseUrl}}/cart/update/{{itemId}}
+Content-Type: {{contentType}}
+Cookie: accessToken={{accessToken}}
+
+{
+  "quantity": 3
+}
+
+###
+
+### Remove Cart Item — Xoá một sản phẩm khỏi giỏ hàng
+DELETE {{baseUrl}}/cart/remove/{{itemId}}
+Content-Type: {{contentType}}
+Cookie: accessToken={{accessToken}}
+
+###
+
+### Clear Cart — Xoá toàn bộ giỏ hàng
+DELETE {{baseUrl}}/cart/clear
+Content-Type: {{contentType}}
+Cookie: accessToken={{accessToken}}
+
+###
