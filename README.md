@@ -1,8 +1,8 @@
-# Book Tour — Backend API
+# Shoes Shop — Backend API
 
-Backend RESTful API cho hệ thống quản lý sản phẩm thời trang.
+Backend RESTful API cho nền tảng bán giày trực tuyến.
 
-## Công nghệ sử dụngX
+## Công nghệ sử dụng
 
 | Công nghệ                   | Mục đích                                |
 | --------------------------- | --------------------------------------- |
@@ -16,42 +16,57 @@ Backend RESTful API cho hệ thống quản lý sản phẩm thời trang.
 | Nodemailer                  | Gửi email                               |
 | VNPay                       | Tích hợp thanh toán                     |
 | Multer                      | Xử lý upload file                       |
+| Groq AI                     | Chatbot & AI features                   |
 | Vercel                      | Deploy (Serverless)                     |
 
 ## Cấu trúc thư mục
 
 ```
-book-tour-be/
+shoes-shop-be/
 ├── sever.ts                  # Entry point
 ├── vercel.json               # Cấu hình deploy Vercel
 ├── http/                     # File test API (REST Client)
 │   ├── auth.http
 │   ├── accounts.http
-│   ├── tours.http
-│   ├── hotels.http
-│   ├── flights.http
 │   ├── products.http
+│   ├── cart.http
 │   └── misc.http
 └── src/
     ├── config/               # Cấu hình (DB, CORS, Cloudinary, VNPay...)
     ├── controllers/          # Xử lý request/response
     │   ├── admin/            # API dành cho admin
-    │   └── client/           # API dành cho client
+    │   │   ├── accounts/
+    │   │   ├── products/
+    │   │   ├── cart/
+    │   │   ├── discounts/
+    │   │   ├── orders/
+    │   │   ├── reviews/
+    │   │   ├── dashboard/
+    │   │   └── marketing/
+    │   ├── client/           # API dành cho khách hàng
+    │   │   ├── cart/
+    │   │   ├── orders/
+    │   │   └── newsletter/
+    │   └── payment/          # Xử lý thanh toán
     ├── dto/                  # Data Transfer Objects
     ├── middlewares/          # Auth middleware, upload middleware
     ├── models/               # Mongoose schema
     │   ├── accounts/
-    │   ├── tours/
-    │   ├── hotels/
-    │   ├── flights/
-    │   └── products/
-    ├── providers/            # JWT provider, gửi mail
+    │   ├── products/
+    │   ├── marketing/
+    │   └── settings/
+    ├── providers/            # JWT provider, gửi mail, Groq AI
     ├── routes/               # Định nghĩa route
     │   ├── admin/
     │   └── client/
     ├── services/             # Business logic
+    │   ├── admin/
+    │   ├── client/
+    │   └── payment/
+    ├── sockets/              # WebSocket realtime
     ├── utils/                # Hàm tiện ích, types
-    └── validations/          # Zod schema validation
+    ├── validations/          # Zod schema validation
+    └── config/               # Cấu hình hệ thống
 ```
 
 ## Cài đặt & Chạy
@@ -60,7 +75,7 @@ book-tour-be/
 
 ```bash
 git clone <repo-url>
-cd book-tour-be
+cd shoes-shop-be
 ```
 
 ### 2. Cài đặt dependencies
@@ -77,7 +92,7 @@ Tạo file `.env` ở thư mục gốc với nội dung sau:
 PORT=3000
 
 # MongoDB Atlas
-MONGO_URL=mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/book-tour-management
+MONGO_URL=mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/shoes-shop
 
 # JWT
 ACCESS_TOKEN_SECRET_SIGNATURE=your_access_token_secret
@@ -92,7 +107,7 @@ CLOUD_SECRET=your_cloud_secret
 EMAIL_USER=your_email@gmail.com
 EMAIL_PASS=your_gmail_app_password
 
-# Groq AI (tuỳ chọn)
+# Groq AI
 GROQ_API_KEY=your_groq_api_key
 GROQ_MODEL=llama-3.3-70b-versatile
 
@@ -121,7 +136,7 @@ npm start
 
 ## API Endpoints
 
-### Auth
+### Authentication
 
 | Method | Endpoint              | Mô tả                  |
 | ------ | --------------------- | ---------------------- |
@@ -129,41 +144,50 @@ npm start
 | POST   | `/auth/login`         | Đăng nhập              |
 | POST   | `/auth/refresh-token` | Làm mới Access Token   |
 | GET    | `/auth/google`        | Đăng nhập Google OAuth |
+| POST   | `/auth/logout`        | Đăng xuất              |
 
-### Admin
+### Admin Panel
 
-| Module        | Prefix                   |
-| ------------- | ------------------------ |
-| Tài khoản     | `/admin/accounts`        |
-| Tour          | `/admin/tours`           |
-| Danh mục tour | `/admin/tour-categories` |
-| Khách sạn     | `/admin/hotels`          |
-| Loại phòng    | `/admin/room-types`      |
-| Chuyến bay    | `/admin/flights`         |
-| Hãng bay      | `/admin/airlines`        |
-| Sản phẩm      | `/admin/products`        |
-| Upload        | `/admin/upload`          |
-| Dashboard     | `/admin/dashboard`       |
+| Module      | Prefix              | Mô tả                       |
+| ----------- | ------------------- | --------------------------- |
+| Tài khoản   | `/admin/accounts`   | Quản lý người dùng          |
+| Sản phẩm    | `/admin/products`   | Thêm/sửa/xóa sản phẩm       |
+| Giỏ hàng    | `/admin/cart`       | Quản lý giỏ hàng khách hàng |
+| Đơn hàng    | `/admin/orders`     | Quản lý đơn hàng            |
+| Đánh giá    | `/admin/reviews`    | Quản lý bình luận/đánh giá  |
+| Mã giảm giá | `/admin/discounts`  | Tạo & quản lý khuyến mãi    |
+| Bản tin     | `/admin/newsletter` | Quản lý email marketing     |
+| Dashboard   | `/admin/dashboard`  | Thống kê & báo cáo          |
+| Upload      | `/admin/upload`     | Upload ảnh sản phẩm         |
 
-### Client
+### Client API
 
-| Module     | Prefix      |
-| ---------- | ----------- |
-| Tour       | `/tours`    |
-| Khách sạn  | `/hotels`   |
-| Chuyến bay | `/flights`  |
-| Sản phẩm   | `/products` |
-| Thanh toán | `/payment`  |
+| Module     | Prefix        | Mô tả                      |
+| ---------- | ------------- | -------------------------- |
+| Sản phẩm   | `/products`   | Danh sách & chi tiết giày  |
+| Giỏ hàng   | `/cart`       | Thêm/xóa/cập nhật giỏ hàng |
+| Đơn hàng   | `/orders`     | Lịch sử mua hàng           |
+| Thanh toán | `/payment`    | Tích hợp VNPay             |
+| Bình luận  | `/reviews`    | Đánh giá sản phẩm          |
+| Bản tin    | `/newsletter` | Đăng ký nhận tin           |
 
 > Xem chi tiết các request trong thư mục `http/` (dùng với VS Code extension **REST Client**)
+
+## Tính năng chính
+
+✅ **Quản lý sản phẩm** - Thêm, sửa, xóa giày với hình ảnh từ Cloudinary  
+✅ **Giỏ hàng & Đơn hàng** - Quản lý đầy đủ quy trình mua hàng  
+✅ **Thanh toán VNPay** - Tích hợp cổng thanh toán Việt Nam  
+✅ **Đăng nhập Google** - Xác thực nhanh qua Google OAuth  
+✅ **Bình luận & Đánh giá** - Khách hàng đánh giá sản phẩm  
+✅ **Khuyến mãi & Mã giảm giá** - Hệ thống chiết khấu linh hoạt  
+✅ **Email Marketing** - Gửi newsletter & thông báo qua email  
+✅ **Chatbot AI** - Hỗ trợ khách hàng với Groq AI  
+✅ **Dashboard Admin** - Thống kê bán hàng & chi tiết tài chính
 
 ## Deploy
 
 Dự án được deploy trên **Vercel** (Serverless Functions).
-
-```
-Production: https://book-tour-khaki.vercel.app
-```
 
 Cấu hình deploy nằm trong `vercel.json` — entry point là `sever.ts`.
 
@@ -173,6 +197,7 @@ Cấu hình deploy nằm trong `vercel.json` — entry point là `sever.ts`.
 - **Gmail**: Dùng [App Password](https://myaccount.google.com/apppasswords) thay vì mật khẩu thường.
 - **VNPay**: Môi trường sandbox — dùng thẻ test do VNPay cung cấp.
 - **Cloudinary**: Tạo tài khoản miễn phí tại [cloudinary.com](https://cloudinary.com).
+- **Groq API**: Đăng ký miễn phí tại [console.groq.com](https://console.groq.com).
 
 ## License
 
