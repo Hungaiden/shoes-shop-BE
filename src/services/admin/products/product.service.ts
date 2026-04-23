@@ -1,9 +1,9 @@
-import Product from "../../../models/products/product.model";
+import Product from '../../../models/products/product.model';
 import {
   CreateProductSchema,
   UpdateProductSchema,
-} from "../../../validations/products/productSchema.zod";
-import * as paramsTypes from "../../../utils/types/paramsTypes";
+} from '../../../validations/products/productSchema.zod';
+import * as paramsTypes from '../../../utils/types/paramsTypes';
 
 // Tạo sản phẩm mới
 export const createProduct = async (raw: any) => {
@@ -17,7 +17,7 @@ export const createProduct = async (raw: any) => {
   if (data.sku) {
     const existing = await Product.findOne({ sku: data.sku });
     if (existing) {
-      throw new Error("SKU đã tồn tại!");
+      throw new Error('SKU đã tồn tại!');
     }
   }
 
@@ -37,10 +37,8 @@ export const getAllProducts = async (
     const query: any = { deletedAt: null };
 
     if (filter?.status) query.status = filter.status;
-    if (filter?.minPrice !== undefined)
-      query.price = { ...query.price, $gte: filter.minPrice };
-    if (filter?.maxPrice !== undefined)
-      query.price = { ...query.price, $lte: filter.maxPrice };
+    if (filter?.minPrice !== undefined) query.price = { ...query.price, $gte: filter.minPrice };
+    if (filter?.maxPrice !== undefined) query.price = { ...query.price, $lte: filter.maxPrice };
     if (filter?.category) query.category = filter.category;
     if (filter?.brand) query.brand = filter.brand;
     if (filter?.isFeatured !== undefined) query.isFeatured = filter.isFeatured;
@@ -48,34 +46,40 @@ export const getAllProducts = async (
     if (searchParams?.keyword && searchParams?.field) {
       query[searchParams.field] = {
         $regex: searchParams.keyword,
-        $options: "i",
+        $options: 'i',
       };
     }
+
+    console.log('🔍 MongoDB Query:', JSON.stringify(query));
+    console.log('📊 Search Params:', searchParams);
 
     const offset = paginateParams?.offset || 0;
     const limit = paginateParams?.limit || 10;
 
     const sortQuery: any = {};
     if (sortParams?.sortBy) {
-      sortQuery[sortParams.sortBy] =
-        sortParams.sortType === paramsTypes.SORT_TYPE.ASC ? 1 : -1;
+      sortQuery[sortParams.sortBy] = sortParams.sortType === paramsTypes.SORT_TYPE.ASC ? 1 : -1;
     }
 
     const totalRows = await Product.countDocuments(query);
     const safeOffset = offset > totalRows ? 0 : offset;
 
+    console.log('📈 Total rows found:', totalRows);
+
     const products = await Product.find(query)
       .skip(safeOffset)
       .limit(limit)
       .sort(sortQuery)
-      .populate("category", "title")
+      .populate('category', 'title')
       .lean();
+
+    console.log('✅ Products found:', products.length);
 
     const totalPages = Math.ceil(totalRows / limit);
 
     return { products, totalRows, totalPages };
   } catch (error) {
-    throw new Error("Lỗi khi lấy danh sách sản phẩm!");
+    throw new Error('Lỗi khi lấy danh sách sản phẩm!');
   }
 };
 
@@ -83,14 +87,14 @@ export const getAllProducts = async (
 export const getProductByIdService = async (id: string) => {
   try {
     const product = await Product.findOne({ _id: id, deletedAt: null })
-      .populate("category", "title")
+      .populate('category', 'title')
       .lean();
     if (!product) {
-      throw new Error("Sản phẩm không tồn tại!");
+      throw new Error('Sản phẩm không tồn tại!');
     }
     return product;
   } catch (error) {
-    throw new Error("Lỗi khi lấy thông tin sản phẩm!");
+    throw new Error('Lỗi khi lấy thông tin sản phẩm!');
   }
 };
 
@@ -103,14 +107,12 @@ export const updateProduct = async (id: string, raw: any) => {
     }
 
     const { _id, ...data } = result.data;
-    const updatedProduct = await Product.findOneAndUpdate(
-      { _id: id, deletedAt: null },
-      data,
-      { new: true },
-    );
+    const updatedProduct = await Product.findOneAndUpdate({ _id: id, deletedAt: null }, data, {
+      new: true,
+    });
     return updatedProduct;
   } catch (error: any) {
-    throw new Error(error.message || "Lỗi khi cập nhật sản phẩm!");
+    throw new Error(error.message || 'Lỗi khi cập nhật sản phẩm!');
   }
 };
 
@@ -124,7 +126,7 @@ export const deleteOneProduct = async (id: string) => {
     );
     return deletedProduct;
   } catch (error) {
-    throw new Error("Lỗi khi xóa sản phẩm!");
+    throw new Error('Lỗi khi xóa sản phẩm!');
   }
 };
 
@@ -141,7 +143,7 @@ export const getProductsByCategory = async (
     if (searchParams?.keyword && searchParams?.field) {
       query[searchParams.field] = {
         $regex: searchParams.keyword,
-        $options: "i",
+        $options: 'i',
       };
     }
 
@@ -150,21 +152,16 @@ export const getProductsByCategory = async (
 
     const sortQuery: any = {};
     if (sortParams?.sortBy) {
-      sortQuery[sortParams.sortBy] =
-        sortParams.sortType === paramsTypes.SORT_TYPE.ASC ? 1 : -1;
+      sortQuery[sortParams.sortBy] = sortParams.sortType === paramsTypes.SORT_TYPE.ASC ? 1 : -1;
     }
 
-    const products = await Product.find(query)
-      .skip(offset)
-      .limit(limit)
-      .sort(sortQuery)
-      .lean();
+    const products = await Product.find(query).skip(offset).limit(limit).sort(sortQuery).lean();
 
     const totalRows = await Product.countDocuments(query);
     const totalPages = Math.ceil(totalRows / limit);
 
     return { products, totalRows, totalPages };
   } catch (error) {
-    throw new Error("Lỗi khi lấy danh sách sản phẩm theo category!");
+    throw new Error('Lỗi khi lấy danh sách sản phẩm theo category!');
   }
 };
